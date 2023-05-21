@@ -1,17 +1,17 @@
 ############################################################################
 # Builds Haskell packages with Haskell.nix
 ############################################################################
-{ haskell-nix
+{ haskellNix
 , incl
 , CHaP
 }:
 let
 
-  inherit (haskell-nix) haskellLib;
+  inherit (haskellNix) haskellLib;
 
   # This creates the Haskell package set.
   # https://input-output-hk.github.io/haskell.nix/user-guide/projects/
-  project = haskell-nix.cabalProject' ({ pkgs
+  project = haskellNix.cabalProject' ({ pkgs
                                        , lib
                                        , config
                                        , buildProject
@@ -56,7 +56,7 @@ let
           # deduce package names and exes from the cabal project to avoid hard-coding them:
           projectPackagesExes =
             let
-              project = haskell-nix.cabalProject' (builtins.removeAttrs config [ "modules" ]);
+              project = haskellNix.cabalProject' (builtins.removeAttrs config [ "modules" ]);
               packages = haskellLib.selectProjectPackages project.hsPkgs;
             in
             lib.genAttrs
