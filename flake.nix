@@ -407,7 +407,7 @@
 
       overlay = final: prev: {
         cardanoNodeProject = (import ./nix/haskell.nix {
-          inherit (final) haskell-nix;
+          inherit (final) haskellNix;
           inherit (std) incl;
           inherit CHaP;
         }).appendModule [
