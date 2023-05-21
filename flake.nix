@@ -8,13 +8,13 @@
 
   inputs = {
     # IMPORTANT: report any change to nixpkgs channel in nix/default.nix:
-    nixpkgs.follows = "haskellNix/nixpkgs-unstable";
+    nixpkgs.follows = "haskell-nix/nixpkgs-unstable";
     hostNixpkgs.follows = "nixpkgs";
     hackageNix = {
       url = "github:input-output-hk/hackage.nix";
       flake = false;
     };
-    haskellNix = {
+    haskell-nix = {
       url = "github:input-output-hk/haskell.nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.hackage.follows = "hackageNix";
@@ -62,7 +62,7 @@
     cardano-automation = {
       url = "github:input-output-hk/cardano-automation";
       inputs = {
-        haskellNix.follows = "haskellNix";
+        haskell-nix.follows = "haskell-nix";
         tullia.follows = "tullia";
         nixpkgs.follows = "nixpkgs";
       };
@@ -74,7 +74,7 @@
     , nixpkgs
     , hostNixpkgs
     , utils
-    , haskellNix
+    , haskell-nix
     , CHaP
     , iohkNix
     , ops-lib
@@ -104,7 +104,7 @@
         # crypto needs to come before haskell.nix.
         # FIXME: _THIS_IS_BAD_
         iohkNix.overlays.crypto
-        haskellNix.overlay
+        haskell-nix.overlay
         iohkNix.overlays.haskell-nix-extra
         iohkNix.overlays.cardano-lib
         iohkNix.overlays.utils
@@ -357,7 +357,7 @@
 
       flake = eachSystem supportedSystems (system:
         let
-          inherit (haskellNix) config;
+          inherit (haskell-nix) config;
           pkgs = import nixpkgs {
             inherit config system overlays;
           };
@@ -407,11 +407,11 @@
 
       overlay = final: prev: {
         cardanoNodeProject = (import ./nix/haskell.nix {
-          inherit (final) haskellNix;
+          inherit (final) haskell-nix;
           inherit (std) incl;
           inherit CHaP;
         }).appendModule [
-          customConfig.haskellNix
+          customConfig.haskell-nix
         ];
         cardanoNodePackages = mkCardanoNodePackages final.cardanoNodeProject;
         inherit (final.cardanoNodePackages) cardano-node cardano-cli cardano-submit-api cardano-tracer bech32 locli db-analyser;
